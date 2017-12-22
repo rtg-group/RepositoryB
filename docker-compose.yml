@@ -1,0 +1,9 @@
+version: "3.2"
+
+services:
+  drupal:
+    # Specify a name for your docker image to be tagged with.
+    image: aaa-ncnu/docker-drupal-starter
+    # Define how the image should be built.
+    build:
+      context: ./drupal
