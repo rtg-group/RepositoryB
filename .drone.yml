@@ -1,0 +1,30 @@
+# Explicitly declare the volume path shared between all containers.
+# Not necessarily needed, but it makes me feel better have it explicit.
+# http://docs.drone.io/workspace/
+workspace:
+  base: /drone
+  path: src/github.com/aaa-ncnu/docker-drupal-starter
+
+# Containers to run throughout pipeline.
+# This example doesn't yet have any.
+# http://docs.drone.io/services/
+# services:
+
+# Pipeline steps to execute.
+# http://docs.drone.io/pipelines/
+pipeline:
+  drupal-image:
+    image: plugins/docker
+    # Docker registry repo, could be hub.docker.com or another provider.
+    repo: aaadigital/drupal-starter
+    context: drupal
+    dockerfile: drupal/Dockerfile
+    tags: "${DRONE_COMMIT_SHA}"
+    secrets:
+      # These are set via Drone (either in the UI or using the CLI), the
+      # credentials would match the Docker registry repo.
+      - docker_username
+      - docker_password
+    when:
+      event:
+        - push

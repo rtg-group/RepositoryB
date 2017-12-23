@@ -4,6 +4,8 @@ A Docker starter to provide a working example of how one may organize a Drupal p
 
 A secondary goal of the project is to act as a reference/training tool for developers getting up to speed with Docker and CD.
 
+[![Build Status](https://webtools.calstate.aaa.com/api/badges/aaa-ncnu/docker-drupal-starter/status.svg)](https://webtools.calstate.aaa.com/aaa-ncnu/docker-drupal-starter)
+
 ## Requisites
 
 1. Clone the repo
@@ -14,7 +16,7 @@ A secondary goal of the project is to act as a reference/training tool for devel
         1. [Install Docker Engine](https://docs.docker.com/engine/getstarted/)
         1. [Install Docker Compose](https://docs.docker.com/compose/install/)
         1. The rest of this guide assumes you have performed the actions to [mange Docker as a non-root user](https://docs.docker.com/engine/installation/linux/linux-postinstall/#manage-docker-as-a-non-root-user). If you haven't, you may need to run commands with `sudo` or as a root user.
-    - Windows (10+ Pro)
+    - Windows (10+ Pro):
         1. [Enable Hyper-V](https://docs.microsoft.com/en-us/virtualization/hyper-v-on-windows/quick-start/enable-hyper-v)
         1. [Install Docker Engine](https://docs.docker.com/docker-for-windows/)
 
