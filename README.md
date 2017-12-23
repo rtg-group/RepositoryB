@@ -4,7 +4,7 @@ A Docker starter to provide a working example of how one may organize a Drupal p
 
 A secondary goal of the project is to act as a reference/training tool for developers getting up to speed with Docker and CD.
 
-[![Build Status](https://webtools.calstate.aaa.com/api/badges/aaa-ncnu/docker-drupal-starter/status.svg)](https://webtools.calstate.aaa.com/aaa-ncnu/docker-drupal-starter)
+![Build Status](https://webtools.calstate.aaa.com/api/badges/aaa-ncnu/docker-drupal-starter/status.svg)
 
 ## Requisites
 
