@@ -21,6 +21,9 @@ COPY --from=base /var/www/html /app
 # matching what is contained in the composer.json/lock rather than the Drupal
 # Docker image we copied from in the prior step.
 #
+# You may even desire to remove the "base" image altogether, should you provide
+# your own composer.json.
+#
 # You can use .dockerignore to ignore files from the build context's copy.
 COPY ./html /app
 WORKDIR /app
