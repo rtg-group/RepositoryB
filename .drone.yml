@@ -13,7 +13,9 @@ workspace:
 # Pipeline steps to execute.
 # http://docs.drone.io/pipelines/
 pipeline:
-  drupal-image:
+  # We call this step "drupal-image", we create a YAML reference to it with
+  # "&drupal-image" so that we may reuse the configuration in another step.
+  drupal-image: &drupal-image
     image: plugins/docker
     # Docker registry repo, could be hub.docker.com or another provider.
     repo: aaadigital/drupal-starter
@@ -28,3 +30,15 @@ pipeline:
     when:
       event:
         - push
+  drupal-image-latest:
+    # This will build quickly as the same exact image was just built, simply
+    # tags as latest when master branch, and pushes up to hub.docker.com.
+    #
+    # We use this YAML reference "<<: *drupal-image" to ensure consistency
+    # between the pipeline steps as we only want different conditions and tags.
+    <<: *drupal-image
+    tags: latest
+    when:
+      event:
+        - push
+      branch: master
