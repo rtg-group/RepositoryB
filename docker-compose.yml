@@ -3,9 +3,16 @@ version: "3.2"
 services:
   drupal:
     # Specify a name for your Docker image to be tagged with, this should
-    # ideally be under whatever namespace your images will be stored under.
+    # ideally be under whatever namespace your images will be stored under
+    # for consistency. We use the tag tag "dev" here so that it is easilly
+    # distinguished from images our CD tool builds.
+    #
+    # Note, that if you were to not define a build configuration then Docker
+    # would not create an image and simply try to retrieve the image from any
+    # registry you've configured (default hub.docker.com).
+    #
     # See .drone.yml
-    image: aaadigital/drupal-starter
+    image: aaadigital/drupal-starter:dev
     # Define how the image should be built.
     build:
       context: ./drupal
