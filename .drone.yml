@@ -13,32 +13,43 @@ workspace:
 # Pipeline steps to execute.
 # http://docs.drone.io/pipelines/
 pipeline:
-  # We call this step "drupal-image", we create a YAML reference to it with
-  # "&drupal-image" so that we may reuse the configuration in another step.
-  drupal-image: &drupal-image
+  # We call this step "drupal-image-build", we create a YAML reference to it
+  # with "&drupal-image" so that we may reuse the configuration in other steps.
+  drupal-image-build: &drupal-image
+    # Note that right now,
     image: plugins/docker
-    # Docker registry repo, could be hub.docker.com or another provider.
+    # Docker image registry repo, could be hub.docker.com or another provider.
     repo: aaadigital/drupal-starter
     context: drupal
     dockerfile: drupal/Dockerfile
     tags: "${DRONE_COMMIT_SHA}"
+    # dry_run prevents push to image registry.
+    dry_run: true
     secrets:
       # These are set via Drone (either in the UI or using the CLI), the
       # credentials would match the Docker registry repo.
       - docker_username
       - docker_password
     when:
-      event:
-        - push
-  drupal-image-latest:
-    # This will build quickly as the same exact image was just built, simply
-    # tags as latest when master branch, and pushes up to hub.docker.com.
-    #
-    # We use this YAML reference "<<: *drupal-image" to ensure consistency
-    # between the pipeline steps as we only want different conditions and tags.
+      event: push
+  # TODO: Add unit test
+
+  # If we have reached this point then our automated tests have passed and we
+  # want to release the Docker image(s) we've built to our image registry.
+  drupal-image-push:
+    # We use this YAML reference "<<: *drupal-image" to rebuild our image from
+    # the "drupal-image-build" step's configuration (&drupal-image). Since
+    # Docker our image is cached this will happen very quickly instead of
+    # rebuilding.
+    <<: *drupal-image
+    # Now we want to push to the registry.
+    dry_run: false
+  # If the push was to the master branch, we also want to tag our image as
+  # "latest" and push it to the registry.
+  drupal-image-push-latest:
     <<: *drupal-image
     tags: latest
+    dry_run: false
     when:
-      event:
-        - push
+      event: push
       branch: master
