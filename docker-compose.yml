@@ -16,3 +16,7 @@ services:
     # Define how the image should be built.
     build:
       context: ./drupal
+    ports:
+      # This exposes port 8080 on the local machine, mapping to port 80 in the
+      # container, can be overridden with an environment variable.
+      - "${DRUPAL_PORT:-8080}:80"

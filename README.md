@@ -48,6 +48,20 @@ docker-compose down
 
 See the [docker-compose CLI overview](https://docs.docker.com/compose/reference/overview/) for other commands.
 
+### Host Accessible Endpoints
+
+- Drupal: http://localhost:8080/
+
+    _Web head for Drupal, in a production environment you'd likely put a reverse proxy in front of these containers._
+
+You can change any of the above ports, without changing any git tracked files, by using environment variables. For example, to have the Drupal container accessible on port 8112 you'd run: `DRUPAL_PORT=8112 docker-compose up`.
+
+If desired, you can even create a .env file in the repo root with this format to avoid specifying ports on every command:
+
+```ini
+DRUPAL_PORT=8080
+```
+
 ## Project Organization
 
 Directories within the repo root represent Docker images. While each Docker image could potentially be its own Git repository, this project has decided to use directories to clearly represent the relationships of the containers.
