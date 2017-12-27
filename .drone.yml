@@ -16,7 +16,6 @@ pipeline:
   # We call this step "drupal-image-build", we create a YAML reference to it
   # with "&drupal-image" so that we may reuse the configuration in other steps.
   drupal-image-build: &drupal-image
-    # Note that right now,
     image: plugins/docker
     # Docker image registry repo, could be hub.docker.com or another provider.
     repo: aaadigital/drupal-starter
@@ -30,6 +29,12 @@ pipeline:
       # credentials would match the Docker registry repo.
       - docker_username
       - docker_password
+    # Note that right now, the Docker plugin is wiping out the local builds,
+    # when https://github.com/drone-plugins/drone-docker/pull/142 is released
+    # we won't have redundant building in subsequent steps with the following
+    # options.
+    # disable_system_prune: true
+    # disable_image_removal: true
     when:
       event: push
   # TODO: Add unit test
