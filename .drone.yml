@@ -24,17 +24,14 @@ pipeline:
     tags: "${DRONE_COMMIT_SHA}"
     # dry_run prevents push to image registry.
     dry_run: true
+    # Prevent cleanup of intermiediary Docker images, allowing other steps to
+    # to reuse the cached layers.
+    purge: false
     secrets:
       # These are set via Drone (either in the UI or using the CLI), the
       # credentials would match the Docker registry repo.
       - docker_username
       - docker_password
-    # Note that right now, the Docker plugin is wiping out the local builds,
-    # when https://github.com/drone-plugins/drone-docker/pull/142 is released
-    # we won't have redundant building in subsequent steps with the following
-    # options.
-    # disable_system_prune: true
-    # disable_image_removal: true
     when:
       event: push
   # TODO: Add unit test
@@ -58,3 +55,13 @@ pipeline:
     when:
       event: push
       branch: master
+
+  drupal-image-cleanup:
+    <<: *drupal-image
+    # After we are done with intermediary (and final) images, purge them from
+    # the build agent.
+    purge: true
+    when:
+      event: push
+      # Ensure the cleanup runs even when an error occurs.
+      status: [ failure, success ]
