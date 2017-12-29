@@ -22,6 +22,7 @@ pipeline:
     context: drupal
     dockerfile: drupal/Dockerfile
     tags: "${DRONE_COMMIT_SHA}"
+    debug: true
     # dry_run prevents push to image registry.
     dry_run: true
     # Prevent cleanup of intermiediary Docker images, allowing other steps to
