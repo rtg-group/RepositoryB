@@ -33,6 +33,7 @@ pipeline:
       # credentials would match the Docker registry repo.
       - docker_username
       - docker_password
+    storage_path: /drone/docker-storage
     when:
       event: push
   # TODO: Add unit test
