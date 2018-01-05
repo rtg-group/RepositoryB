@@ -33,9 +33,12 @@ pipeline:
       # credentials would match the Docker registry repo.
       - docker_username
       - docker_password
+    # We set the storage path to reside within workspace.base to persist
+    # throughout the pipeline so that layer caching is available.
     storage_path: /drone/docker-storage
     when:
       event: push
+
   # TODO: Add unit test
 
   # If we have reached this point then our automated tests have passed and we
@@ -48,6 +51,7 @@ pipeline:
     <<: *drupal-image
     # Now we want to push to the registry.
     dry_run: false
+
   # If the push was to the master branch, we also want to tag our image as
   # "latest" and push it to the registry.
   drupal-image-push-latest:
