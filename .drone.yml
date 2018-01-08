@@ -13,9 +13,9 @@ workspace:
 # Pipeline steps to execute.
 # http://docs.drone.io/pipelines/
 pipeline:
-  # We call this step "drupal-image-build", we create a YAML reference to it
-  # with "&drupal-image" so that we may reuse the configuration in other steps.
-  drupal-image-build: &drupal-image
+  # We call this step "build_drupal", we create a YAML reference to it with
+  # "&drupal-image" so that we may reuse the configuration in other steps.
+  build_drupal: &drupal-image
     image: plugins/docker
     # Docker image registry repo, could be hub.docker.com or another provider.
     repo: aaadigital/drupal-starter
@@ -43,23 +43,29 @@ pipeline:
 
   # If we have reached this point then our automated tests have passed and we
   # want to release the Docker image(s) we've built to our image registry.
-  drupal-image-push:
+  publish_drupal_commit:
     # We use this YAML reference "<<: *drupal-image" to rebuild our image from
-    # the "drupal-image-build" step's configuration (&drupal-image). Since
-    # Docker our image is cached this will happen very quickly instead of
-    # rebuilding.
-    <<: *drupal-image
-    # Now we want to push to the registry.
-    dry_run: false
-
-  # If the push was to the master branch, we also want to tag our image as
-  # "latest" and push it to the registry.
-  drupal-image-push-latest:
+    # the "build_drupal" step's configuration (&drupal-image). Since our Docker
+    # image is cached this will happen very quickly instead of rebuilding.
     <<: *drupal-image
     tags: latest
+    # Now we want to push to the registry.
     dry_run: false
     when:
       event: push
+      branch:
+        # We don't want to use this step if we re on the master branch.
+        exclude: [ master ]
+
+  # If the push was to the master branch, we also want to tag our image as
+  # "latest" and push it to the registry.
+  publish_drupal_latest:
+    <<: *drupal-image
+    tags: [ "${DRONE_COMMIT_SHA}", latest ]
+    dry_run: false
+    when:
+      event: push
+      # When on the master branch we'll tag with the SHA and "latest".
       branch: master
 
   drupal-image-cleanup:
