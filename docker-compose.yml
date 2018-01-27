@@ -1,10 +1,10 @@
 version: "3.2"
 
 services:
-  drupal:
+  drupal_build:
     # Specify a name for your Docker image to be tagged with, this should
     # ideally be under whatever namespace your images will be stored under
-    # for consistency. We use the tag tag "dev" here so that it is easilly
+    # for consistency. We use the tag "dev-base" here so that it is easily
     # distinguished from images our CD tool builds.
     #
     # Note, that if you were to not define a build configuration then Docker
@@ -12,11 +12,65 @@ services:
     # registry you've configured (default hub.docker.com).
     #
     # See .drone.yml
-    image: aaadigital/drupal-starter:dev
+    image: aaadigital/drupal-starter:dev-base
     # Define how the image should be built.
     build:
+      # See ./drupal/Dockerfile
       context: ./drupal
+    # We don't really want to run this container in dev, we only want it for
+    # it's Docker build, so we run a command to exit with a 0. See drupal_dev
+    # container.
+    entrypoint: [ 'true' ]
+
+  drupal_dev:
+    image: aaadigital/drupal-starter:dev
+    depends_on:
+      - drupal_build
+    build:
+      context: ./drupal-dev
+      args:
+        UPSTREAM_TAG: dev-base
     ports:
       # This exposes port 8080 on the local machine, mapping to port 80 in the
       # container, can be overridden with an environment variable.
       - "${DRUPAL_PORT:-8080}:80"
+      - "${XDEBUG_PORT:-8081}:9000"
+    volumes:
+      - type: volume
+        source: drupal-config-volume
+        target: /var/www/config
+      - type: volume
+        source: drupal-html-volume
+        target: /var/www/html
+
+  # Drupal has too many files for bind sync's to be used, even delegated.
+  # See https://docs.docker.com/docker-for-mac/osxfs-caching/
+  #
+  # Instead we use https://hub.docker.com/r/codycraven/quick-bind-sync/
+  drupal_config_sync:
+    image: codycraven/quick-bind-sync:0.1.0
+    depends_on:
+      - drupal_dev
+    volumes:
+      - type: bind
+        source: ./drupal/config
+        target: /host
+      - type: volume
+        source: drupal-config-volume
+        target: /volume
+  drupal_html_sync:
+    image: codycraven/quick-bind-sync:0.1.0
+    depends_on:
+      - drupal_dev
+    volumes:
+      - type: bind
+        source: ./drupal/html
+        target: /host
+      - type: volume
+        source: drupal-html-volume
+        target: /volume
+
+
+volumes:
+  drupal-config-volume:
+  drupal-html-volume:

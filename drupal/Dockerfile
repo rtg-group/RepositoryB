@@ -37,3 +37,8 @@ COPY --from=composer /app /var/www/html
 # Be sure to update your settings.php to include:
 # $config_directories[CONFIG_SYNC_DIRECTORY] = '../config/sync';
 COPY ./config ../config
+# PHP extensions/packages/etc that are intended to be used in your releases can
+# be managed here.
+# See https://hub.docker.com/_/php/ for some examples.
+# If you want to install extensions only for your dev, see
+# ../drupal-dev/Dockerfile.

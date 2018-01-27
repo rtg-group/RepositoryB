@@ -31,19 +31,21 @@ docker-compose build
 Run in the foreground:
 
 ```bash
-docker-compose up
+docker-compose up --build
 ```
+
+_The --build flag forces previously built Docker images to rebuild._
 
 Run in the background:
 
 ```bash
-docker-compose up -d
+docker-compose up --build -d
 ```
 
-Stop/remove containers:
+Stop/remove containers/volumes:
 
 ```bash
-docker-compose down
+docker-compose down -v
 ```
 
 See the [docker-compose CLI overview](https://docs.docker.com/compose/reference/overview/) for other commands.
@@ -54,12 +56,17 @@ See the [docker-compose CLI overview](https://docs.docker.com/compose/reference/
 
     _Web head for Drupal, in a production environment you'd likely put a reverse proxy in front of these containers._
 
+- Xdebug: 8081
+
+    _Xdebug remote connection port on Drupal container._
+
 You can change any of the above ports, without changing any git tracked files, by using environment variables. For example, to have the Drupal container accessible on port 8112 you'd run: `DRUPAL_PORT=8112 docker-compose up`.
 
 If desired, you can even create a .env file in the repo root with this format to avoid specifying ports on every command:
 
 ```ini
 DRUPAL_PORT=8080
+XDEBUG_PORT=8081
 ```
 
 ## Project Organization
