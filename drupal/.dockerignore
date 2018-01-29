@@ -3,5 +3,34 @@
 **/*.gitkeep
 **/.gitignore
 **/.unison.*
+
+# Files from html/.gitignore - make sure to keep in sync.
+html/.csslintrc
+html/.editorconfig
+html/.eslintignore
+html/.eslintrc.json
+html/.gitattributes
+html/.htaccess
+html/autoload.php
+html/example.gitignore
+html/index.php
+html/robots.txt
+html/update.php
+html/web.config
+html/LICENSE.txt
+html/README.txt
+html/modules/README.txt
+html/profiles/README.txt
+html/sites/development.services.yml
+html/sites/example.settings.local.php
+html/sites/example.sites.php
+html/sites/default/default.services.yml
+html/sites/default/default.settings.php
+# Files from html/.gitignore shipped as html/example.gitignore defaults.
 html/core
 html/vendor
+html/sites/*/settings*.php
+html/sites/*/services*.yml
+html/sites/*/files
+html/sites/*/private
+html/sites/simpletest
