@@ -1,3 +1,7 @@
 # Remove all readme's and git dir holders from build context.
 **/README.md
 **/*.gitkeep
+**/.gitignore
+**/.unison.*
+html/core
+html/vendor
