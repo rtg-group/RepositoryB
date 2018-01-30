@@ -1,0 +1,26 @@
+# Global configuration
+# logLevel = "DEBUG"
+defaultEntryPoints = ["https"]
+
+# Entrypoints
+[entryPoints]
+  [entryPoints.http]
+  address = ":80"
+  [entryPoints.https]
+  address = ":443"
+  [entryPoints.https.tls]
+    [[entryPoints.https.tls.certificates]]
+    CertFile = "/etc/ssl/traefik.crt"
+    KeyFile = "/etc/ssl/traefik.key"
+  [entryPoint.mysql]
+  address = ":3306"
+  [entryPoint.xdebug]
+  address = ":9000"
+
+# Træfik GUI
+[web]
+address = ":8080"
+
+# Docker configuration backend
+[docker]
+domain = "docker.localhost"
