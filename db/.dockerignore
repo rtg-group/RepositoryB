@@ -1,0 +1,3 @@
+# Remove all readme's and git dir holders from build context.
+**/README.md
+**/*.gitkeep

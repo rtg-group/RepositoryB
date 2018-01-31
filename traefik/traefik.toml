@@ -12,10 +12,6 @@ defaultEntryPoints = ["https"]
     [[entryPoints.https.tls.certificates]]
     CertFile = "/etc/ssl/traefik.crt"
     KeyFile = "/etc/ssl/traefik.key"
-  [entryPoint.mysql]
-  address = ":3306"
-  [entryPoint.xdebug]
-  address = ":9000"
 
 # Træfik GUI
 [web]

@@ -19,14 +19,14 @@ services:
       context: ./drupal
     networks:
       - default
-      # Shared network used to connect to Træfik container.
-      - shared
+      # Network "traefik" used to connect to Træfik container.
+      - traefik
     labels:
       # Træfik configuration is managed via these labels.
-      - "traefik.docker.network=shared"
-      - "traefik.backend=drupal"
+      - "traefik.docker.network=traefik"
       - "traefik.port=80"
-      - "traefik.frontend.rule=Host:drupal.localhost"
+      - "traefik.backend=localhost.${NAMESPACE:-drupal}"
+      - "traefik.frontend.rule=Host:${NAMESPACE:-drupal}.localhost"
     # Note this container does not make use of any bind mounts from the local
     # machine. To update the image with new code you'd need to rebuild.
 
@@ -44,12 +44,12 @@ services:
         UPSTREAM_TAG: local
     networks:
       - default
-      - shared
+      - traefik
     labels:
-      - "traefik.docker.network=shared"
-      - "traefik.backend=drupal-dev"
+      - "traefik.docker.network=traefik"
       - "traefik.port=80"
-      - "traefik.frontend.rule=Host:dev.drupal.localhost"
+      - "traefik.backend=localhost.${NAMESPACE:-drupal}.dev"
+      - "traefik.frontend.rule=Host:dev.${NAMESPACE:-drupal}.localhost"
     volumes:
       - type: volume
         source: drupal-config-volume
@@ -57,6 +57,26 @@ services:
       - type: volume
         source: drupal-html-volume
         target: /var/www/html
+
+  db:
+    image: aaadigital/drupal-starter-db:dev
+    build:
+      context: ./db
+    environment:
+      MYSQL_ROOT_PASSWORD: "${DB_ROOT_PASSWORD:-youshouldmodifythis}"
+
+  adminer:
+    image: adminer
+    # Note we do not specify a build here since we have no need to modify the
+    # available Docker image for this project.
+    networks:
+      - default
+      - traefik
+    labels:
+      - "traefik.docker.network=traefik"
+      - "traefik.port=8080"
+      - "traefik.backend=localhost.${NAMESPACE:-drupal}.adminer"
+      - "traefik.frontend.rule=Host:db.${NAMESPACE:-drupal}.localhost"
 
   # Drupal has too many files for bind sync's to be used, even delegated.
   # See https://docs.docker.com/docker-for-mac/osxfs-caching/
@@ -90,6 +110,6 @@ volumes:
   drupal-html-volume:
 
 networks:
-  # The shared network is created in the README.md requisites.
-  shared:
+  # The traefik network is created in the README.md requisites.
+  traefik:
     external: true

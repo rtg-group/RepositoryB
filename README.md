@@ -23,14 +23,14 @@ A secondary goal of the project is to act as a reference/training tool for devel
 1. Create a named network in Docker:
 
     ```bash
-    docker network create shared
+    docker network create traefik
     ```
 
     _Note you may change this name to anything you want. To do so, you'll need to update the references in docker-compose.yml_
 
     We create a network so that we can run a container called [Træfik](https://traefik.io/) on it. This container is a reverse proxy that allows us to expose multiple containers to the host machine via a single port by using name routing.
 
-    For example, if you want to run two different web containers on port 80, you can expose only one port on your host machine and use Træfik to access them via different domain names. Træfik supports much more than 
+    For example, if you want to run two different web containers on port 80, you can expose only one port on your host machine and use Træfik to access them via different domain names.
 
 1. Generate SSL certificates for your local environment:
     - Mac/Linux:
@@ -62,12 +62,10 @@ A secondary goal of the project is to act as a reference/training tool for devel
 
         _If you really don't want to use https in your local, you could instead use port 80, but you'll need to make configuration changes in docker-compose.yml to assign the label `"traefik.frontend.entryPoints=http"` for any containers you wish to access via port 80._
 
-    - 3306: To handle MySQL requests.
     - 8080: To access the Træfik Web UI.
-    - 9000: To handle Xdebug communication.
     - Note, you can modify any of these ports as you see fit.
 
-        If you desired, you could make your MySQL access operate over port 8881. However, you'll need to specify the port mapping in your traefik/traefik.toml configuration, modify your Traefik run command, and make any connections from your local over port 8881.
+        However, you'll need to specify the port mapping in your traefik/traefik.toml configuration, modify your Traefik run command, and make any connections from your local over the configured port.
 
 1. Run a [Træfik](https://traefik.io/) container with the desired host ports listening:
 
@@ -75,11 +73,9 @@ A secondary goal of the project is to act as a reference/training tool for devel
 
         ```bash
         docker run --rm -d \
-        --network=shared \
+        --network=traefik \
         -p "443:443" \
-        -p "3306:3306" \
         -p "8080:8080" \
-        -p "9000:9000" \
         -v /var/run/docker.sock:/var/run/docker.sock \
         -v ${PWD}/traefik/traefik.toml:/etc/traefik/traefik.toml \
         -v ${PWD}/traefik/traefik.crt:/etc/ssl/traefik.crt \
@@ -91,11 +87,9 @@ A secondary goal of the project is to act as a reference/training tool for devel
 
         ```bash
         docker run --rm -d `
-        --network=shared `
+        --network=traefik `
         -p "443:443" `
-        -p "3306:3306" `
         -p "8080:8080" `
-        -p "9000:9000" `
         -v /var/run/docker.sock:/var/run/docker.sock `
         -v ${PWD}\traefik\traefik.toml:/etc/traefik/traefik.toml `
         -v ${PWD}\traefik\traefik.crt:/etc/ssl/traefik.crt `
@@ -111,8 +105,9 @@ A secondary goal of the project is to act as a reference/training tool for devel
 
     - drupal.localhost
     - dev.drupal.localhost
+    - adminer.drupal.localhost
 
-    _Note that some web browsers (Chromium/Chrome on Mac) will resolve *.localhost to 127.0.0.1 automatically._
+    _Note that some web browsers (Chromium based and possible others) will resolve *.localhost to 127.0.0.1 automatically._
 
 ## (Re)Build Docker Images
 
@@ -168,8 +163,15 @@ See the [docker-compose CLI overview](https://docs.docker.com/compose/reference/
 
     - Port 443  
     Port for https.
-    - Port 9000  
-    Xdebug port.
+
+- Adminer: https://adminer.drupal.localhost/
+
+    [Adminer](https://www.adminer.org/) web interface for MySQL.
+
+    _Note, there's nothing that prevents you gaining CLI access to the MySQL container: `docker-compose exec db mysql ...`._
+
+    - Port 443  
+    Port for https.
 
 - Træfik Web UI: http://localhost:8080/
 
