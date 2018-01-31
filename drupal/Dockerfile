@@ -32,6 +32,9 @@ RUN composer install --no-dev
 
 FROM drupal:${DRUPAL_VERSION}-apache
 COPY --from=composer /app /var/www/html
+# Make Apache tell PHP it is HTTPS when behind an SSL terminated reverse proxy.
+RUN echo "SetEnvIf X-Forwarded-Proto https HTTPS=on" >> /etc/apache2/conf-available/https.conf; \
+	ln -s /etc/apache2/conf-available/https.conf /etc/apache2/conf-enabled/https.conf
 # Best practice is to store config exports outside the webroot.
 #
 # Be sure to update your settings.php to include:
