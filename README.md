@@ -163,8 +163,6 @@ See the [docker-compose CLI overview](https://docs.docker.com/compose/reference/
 
     - Port 443  
     Port for https.
-    - Port 9000  
-    Xdebug port.
 
 - Adminer: https://adminer.drupal.localhost/
 
