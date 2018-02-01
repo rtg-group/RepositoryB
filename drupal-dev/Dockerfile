@@ -20,6 +20,9 @@ RUN composer install
 
 FROM aaadigital/drupal-starter:${UPSTREAM_TAG}
 COPY --from=composer /app /var/www/html
+# Since we're in a multi-stage build our chown'd file permissions don't persist
+# from the upstream drupal-starter image, thus we re-apply.
+RUN chown -R www-data:www-data sites modules themes ../config
 # Install PHP extensions we want for dev only. Extensions for your releasable
 # image are defined in ../drupal/Dockerfile.
 RUN pecl install xdebug-2.5.5 \

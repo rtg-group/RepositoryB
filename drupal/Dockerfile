@@ -40,6 +40,9 @@ RUN echo "SetEnvIf X-Forwarded-Proto https HTTPS=on" >> /etc/apache2/conf-availa
 # Be sure to update your settings.php to include:
 # $config_directories[CONFIG_SYNC_DIRECTORY] = '../config/sync';
 COPY ./config ../config
+# Since we're in a multi-stage build our chown'd file permissions don't persist
+# from the upstream drupal image, thus we re-apply.
+RUN chown -R www-data:www-data sites modules themes ../config
 # PHP extensions/packages/etc that are intended to be used in your releases can
 # be managed here.
 # See https://hub.docker.com/_/php/ for some examples.
