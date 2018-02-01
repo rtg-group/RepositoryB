@@ -32,11 +32,17 @@ RUN composer install --no-dev
 
 FROM drupal:${DRUPAL_VERSION}-apache
 COPY --from=composer /app /var/www/html
+# Make Apache tell PHP it is HTTPS when behind an SSL terminated reverse proxy.
+RUN echo "SetEnvIf X-Forwarded-Proto https HTTPS=on" >> /etc/apache2/conf-available/https.conf; \
+	ln -s /etc/apache2/conf-available/https.conf /etc/apache2/conf-enabled/https.conf
 # Best practice is to store config exports outside the webroot.
 #
 # Be sure to update your settings.php to include:
 # $config_directories[CONFIG_SYNC_DIRECTORY] = '../config/sync';
 COPY ./config ../config
+# Since we're in a multi-stage build our chown'd file permissions don't persist
+# from the upstream drupal image, thus we re-apply.
+RUN chown -R www-data:www-data sites modules themes ../config
 # PHP extensions/packages/etc that are intended to be used in your releases can
 # be managed here.
 # See https://hub.docker.com/_/php/ for some examples.
