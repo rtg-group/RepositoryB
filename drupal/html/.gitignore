@@ -1,6 +1,13 @@
 # When you make changes to this file, you should also make the same changes to
 # ../.dockerignore !!!
 
+# Since we install contrib projects from Composer, we do not add include them
+# in the repo. If you prefer to, remove these lines:
+modules/contrib
+profiles/contrib
+themes/contrib
+drush/contrib
+
 # Below is the sample .gitignore Drupal ships with, however before we do that,
 # let's ignore files that we pickup from Dockerfile build.
 #
