@@ -177,6 +177,22 @@ See the [docker-compose CLI overview](https://docs.docker.com/compose/reference/
 
     User interface for the Træfik reverse proxy.
 
+### Useful Commands and Examples
+
+- Run Composer commands:
+
+    ```bash
+    docker-compose run --rm --no-deps composer [COMPOSER COMMAND]
+    ```
+
+    _Note the composer service does not continually run in the background (to reduce resource consumption), so we use the `docker-compose run` command instead of `docker-compose exec`._
+
+    - Composer install a Drupal module ([Paragraphs](https://www.drupal.org/project/paragraphs) in this case):
+
+        ```bash
+        docker-compose run --rm --no-deps composer require drupal/paragraphs
+        ```
+
 ## Project Organization
 
 Directories within the repo root represent Docker images. While each Docker image could potentially be its own Git repository, this project has decided to use directories to clearly represent the relationships of the containers.

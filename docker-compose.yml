@@ -105,6 +105,19 @@ services:
         source: drupal-html-volume
         target: /volume
 
+  # Define a service to make running Composer easier.
+  composer:
+    image: composer:1.5
+    depends_on:
+      - drupal_dev
+    volumes:
+      - type: volume
+        source: drupal-html-volume
+        target: /app
+    # By default, exit with success so we don't take up resources.
+    # See README.md for usage.
+    command: [ "true" ]
+
 volumes:
   drupal-config-volume:
   drupal-html-volume:
