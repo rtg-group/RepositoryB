@@ -5,6 +5,11 @@
 **/.unison.*
 
 # Files from html/.gitignore - make sure to keep in sync.
+html/modules/contrib
+html/profiles/contrib
+html/themes/contrib
+html/drush/contrib
+# Files from html/.gitignore shipped as html/example.gitignore defaults.
 html/.csslintrc
 html/.editorconfig
 html/.eslintignore
@@ -26,7 +31,6 @@ html/sites/example.settings.local.php
 html/sites/example.sites.php
 html/sites/default/default.services.yml
 html/sites/default/default.settings.php
-# Files from html/.gitignore shipped as html/example.gitignore defaults.
 html/core
 html/vendor
 html/sites/*/settings*.php
