@@ -193,6 +193,27 @@ See the [docker-compose CLI overview](https://docs.docker.com/compose/reference/
         docker-compose run --rm --no-deps composer require drupal/paragraphs
         ```
 
+    - Composer install Drush:
+
+        ```bash
+        docker-compose run --rm --no-deps composer require drush/drush
+        ```
+
+
+- Run Drush commands (install Drush with Composer first):
+
+    ```bash
+    docker-compose exec drupal_dev vendor/bin/drush [DRUSH COMMAND]
+    ```
+
+    _Note, many Drush commands require Drupal to be installed. If you encounter errors ensure you have a functional Drupal site if the command requires one._
+
+    - Example, [drupal-directory](https://drushcommands.com/drush-8x/core/drupal-directory/) (dd):
+
+        ```bash
+        docker-compose exec drupal_dev vendor/bin/drush dd
+        ```
+
 ## Project Organization
 
 Directories within the repo root represent Docker images. While each Docker image could potentially be its own Git repository, this project has decided to use directories to clearly represent the relationships of the containers.
