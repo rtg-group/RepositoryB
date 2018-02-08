@@ -177,6 +177,23 @@ See the [docker-compose CLI overview](https://docs.docker.com/compose/reference/
 
     User interface for the Træfik reverse proxy.
 
+### Installing Drupal
+
+To install Drupal:
+
+1. Visit https://dev.drupal.localhost or https://drupal.localhost (depending if you want to install to your dev site or not)
+1. Proceed to the "Set up database" step
+1. Fill out the form:
+    - Database type: MySQL
+    - Database name: _Use whatever you'd like_
+    - Database username: root
+    - Database password: youshouldmodifythis _(or if you set an environment variable MYSQL_ROOT_PASSWORD then whatever value that is set to)_
+    - Advanced options:
+        - Host: db
+        - Port number: 3306
+        - Table name prefix: _Blank, unless you desire one_
+1. Save and proceed with the rest of your configuration
+
 ### Useful Commands and Examples
 
 - Run Composer commands:
