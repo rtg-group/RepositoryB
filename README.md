@@ -107,7 +107,7 @@ A secondary goal of the project is to act as a reference/training tool for devel
     - dev.drupal.localhost
     - adminer.drupal.localhost
 
-    _Note that some web browsers (Chromium based and possible others) will resolve *.localhost to 127.0.0.1 automatically._
+    _Note that some web browsers (Chromium based and possibly others) will resolve *.localhost to 127.0.0.1 automatically._
 
 ## (Re)Build Docker Images
 
