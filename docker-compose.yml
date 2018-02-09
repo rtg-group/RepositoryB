@@ -76,7 +76,7 @@ services:
       - "traefik.docker.network=traefik"
       - "traefik.port=8080"
       - "traefik.backend=localhost.${NAMESPACE:-drupal}.adminer"
-      - "traefik.frontend.rule=Host:db.${NAMESPACE:-drupal}.localhost"
+      - "traefik.frontend.rule=Host:adminer.${NAMESPACE:-drupal}.localhost"
 
   # Drupal has too many files for bind sync's to be used, even delegated.
   # See https://docs.docker.com/docker-for-mac/osxfs-caching/
