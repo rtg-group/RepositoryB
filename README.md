@@ -231,6 +231,24 @@ To install Drupal:
         docker-compose exec drupal_dev vendor/bin/drush dd
         ```
 
+- Backup/restore databases:
+
+    Issue the commands below — substituting DB_NAME for your database's name and data.sql for the name of the sql file you'd like to use:
+
+    - Backup to file:
+
+        ```bash
+        docker-compose exec db mysqldump -u root -p${DB_ROOT_PASSWORD:-youshouldmodifythis} DB_NAME > data.sql
+        ```
+
+    - Restore from file:
+
+        ```bash
+        docker-compose exec db mysql -u root -p${DB_ROOT_PASSWORD:-youshouldmodifythis} DB_NAME < data.sql
+        ```
+
+    _The commands above make use of `${DB_ROOT_PASSWORD:-youshouldmodifythis}`. This is the environment variable with default fallback configured in [./docker-compose.yml](./docker-compose.yml)._
+
 ## Project Organization
 
 Directories within the repo root represent Docker images. While each Docker image could potentially be its own Git repository, this project has decided to use directories to clearly represent the relationships of the containers.
